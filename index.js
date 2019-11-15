@@ -3,6 +3,7 @@ import express from 'express'
 import ReactDomServer from 'react-dom/server'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import path from 'path';
 
 const app = express()
 
@@ -18,7 +19,8 @@ app.post('/:component', async (req, res) => {
   const { props } = req.body
   
   try {
-    const GettedComponent = await import(`/components/${component}`)
+    const url = path.resolve(__dirname, `./components/${component}`)
+    const GettedComponent = require(url)
 
     res.send(ReactDomServer.renderToString(
       <GettedComponent.default {...props}/>
