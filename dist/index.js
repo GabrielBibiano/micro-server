@@ -4,8 +4,6 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _interopRequireWildcard2 = _interopRequireDefault(require("@babel/runtime/helpers/interopRequireWildcard"));
-
 var _react = _interopRequireDefault(require("react"));
 
 var _express = _interopRequireDefault(require("express"));
@@ -16,6 +14,8 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
+var _path = _interopRequireDefault(require("path"));
+
 var app = (0, _express["default"])();
 app.use((0, _cors["default"])());
 app.use(_bodyParser["default"].json());
@@ -23,36 +23,29 @@ app.get('/', function (req, res) {
   res.send('running');
 });
 app.post('/:component', function _callee(req, res) {
-  var component, props, GettedComponent;
+  var component, props, url, GettedComponent;
   return _regenerator["default"].async(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
           component = req.params.component;
           props = req.body.props;
-          _context.prev = 2;
-          _context.next = 5;
-          return _regenerator["default"].awrap(Promise.resolve().then(function () {
-            return (0, _interopRequireWildcard2["default"])(require("./components/".concat(component)));
-          }));
 
-        case 5:
-          GettedComponent = _context.sent;
-          res.send(_server["default"].renderToString(_react["default"].createElement(GettedComponent["default"], props)));
-          _context.next = 12;
-          break;
+          try {
+            url = _path["default"].resolve(__dirname, "./components/".concat(component, "/index.js"));
+            GettedComponent = require(url);
+            res.send(_server["default"].renderToString(_react["default"].createElement(GettedComponent["default"], props)));
+          } catch (e) {
+            console.log('ERROR: ', e);
+            res.send('Component not found').status(404);
+          }
 
-        case 9:
-          _context.prev = 9;
-          _context.t0 = _context["catch"](2);
-          res.send('Component not found').status(404);
-
-        case 12:
+        case 3:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[2, 9]]);
+  });
 });
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
