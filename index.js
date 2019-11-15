@@ -18,7 +18,7 @@ app.post('/:component', async (req, res) => {
   const { props } = req.body
   
   try {
-    const GettedComponent = await import(`./components/${component}`)
+    const GettedComponent = await import(`/components/${component}`)
 
     res.send(ReactDomServer.renderToString(
       <GettedComponent.default {...props}/>
