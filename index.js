@@ -19,7 +19,7 @@ app.post('/:component', async (req, res) => {
   const { props } = req.body
   
   try {
-    const url = path.resolve(__dirname, `./components/${component}`)
+    const url = path.resolve(__dirname, `./components/${component}/index.js`)
     const GettedComponent = require(url)
 
     res.send(ReactDomServer.renderToString(
