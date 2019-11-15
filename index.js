@@ -24,7 +24,8 @@ app.post('/:component', async (req, res) => {
       <GettedComponent.default {...props}/>
     ));
   } catch(e) {
-    res.send('Component not found').status(404);
+    console.log('ERROR: ', e)
+    res.send('Component not found').status(404)
   }
 })
 
